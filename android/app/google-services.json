@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "661555367074",
+    "project_id": "club-for-me-7c1cd",
+    "storage_bucket": "club-for-me-7c1cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661555367074:android:b235e3b836b74c2db59bfb",
+        "android_client_info": {
+          "package_name": "com.example.club_for_me"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1D7EyzRWHwknRCY4JDaTZ3F91n7W8ROI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
