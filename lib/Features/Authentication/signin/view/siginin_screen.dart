@@ -210,37 +210,40 @@ class RoundedButtonWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        height: 58,
-        width: MediaQuery.of(context).size.width * 0.8,
-        decoration: BoxDecoration(
-            color: Colors.black, borderRadius: BorderRadius.circular(15)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(
-              width: 25,
-            ),
-            Text(
-              buttonLabel.toString(),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          height: 58,
+          width: MediaQuery.of(context).size.width * 0.8,
+          decoration: BoxDecoration(
+              color: Colors.black, borderRadius: BorderRadius.circular(15)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                width: 25,
               ),
-            ),
-            CircleAvatar(
-              backgroundColor: const Color(0xff303030),
-              radius: 15,
-              child: Icon(
-                icon,
-                color: Colors.white,
+              Text(
+                buttonLabel.toString(),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            )
-          ],
+              CircleAvatar(
+                backgroundColor: const Color(0xff303030),
+                radius: 15,
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

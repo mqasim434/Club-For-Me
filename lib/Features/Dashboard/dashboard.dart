@@ -15,6 +15,7 @@ class DashboardScreen extends StatelessWidget {
         body: PageView(
           controller: dashboardController.pageController,
           onPageChanged: dashboardController.changeSelectedPage,
+          physics: NeverScrollableScrollPhysics(),
           children: dashboardController.screensList,
         ),
         bottomNavigationBar: const BottomNavBar(),

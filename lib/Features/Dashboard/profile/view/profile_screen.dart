@@ -1,5 +1,6 @@
 import 'package:club_for_me/Features/Authentication/signin/view/siginin_screen.dart';
 import 'package:club_for_me/Features/Chat/messages_screen.dart';
+import 'package:club_for_me/Features/Dashboard/events/view/create_event_screen.dart';
 import 'package:club_for_me/Features/Dashboard/profile/view/my_profile_screen.dart';
 import 'package:club_for_me/Features/Notifications/view/notifications_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -125,40 +126,64 @@ class ProfileScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: const Color(0xffEFEFEF),
                       borderRadius: BorderRadius.circular(6)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.person_add_alt),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Request for Organizer',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
+                      ProfileButtonWidget(
+                        label: 'Create an Event',
+                        icon: Icons.add,
+                        onTap: () {
+                          Get.to(()=>CreateEventScreen());
+                        },
                       ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
-                            minimumSize: const Size(80, 30),
-                            maximumSize: const Size(80, 40),
-                            backgroundColor: Colors.grey,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
-                        onPressed: () {},
-                        child: const Text(
-                          'Request',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
+                      ProfileButtonWidget(
+                        label: 'Manage Events',
+                        icon: Icons.calendar_month,
+                        onTap: () {},
+                      ),
                     ],
                   ),
                 ),
+                // Container(
+                //   width: screenWidth,
+                //   padding: const EdgeInsets.all(8),
+                //   decoration: BoxDecoration(
+                //       color: const Color(0xffEFEFEF),
+                //       borderRadius: BorderRadius.circular(6)),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       const Row(
+                //         children: [
+                //           Icon(Icons.person_add_alt),
+                //           SizedBox(
+                //             width: 8,
+                //           ),
+                //           Text(
+                //             'Request for Organizer',
+                //             style: TextStyle(fontSize: 16),
+                //           ),
+                //         ],
+                //       ),
+                //       TextButton(
+                //         style: TextButton.styleFrom(
+                //             padding: const EdgeInsets.all(0),
+                //             minimumSize: const Size(80, 30),
+                //             maximumSize: const Size(80, 40),
+                //             backgroundColor: Colors.grey,
+                //             shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(5))),
+                //         onPressed: () {},
+                //         child: const Text(
+                //           'Request',
+                //           style: TextStyle(
+                //             color: Colors.black,
+                //           ),
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
+
                 const SizedBox(
                   height: 4,
                 ),
@@ -200,8 +225,8 @@ class ProfileScreen extends StatelessWidget {
                         icon: Icons.logout,
                         onTap: () {
                           FirebaseAuth.instance.signOut().then((val) {
-                        Get.offAll(const SigininScreen());
-                      });
+                            Get.offAll(const SigininScreen());
+                          });
                         },
                       ),
                     ],

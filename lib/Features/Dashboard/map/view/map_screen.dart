@@ -1,10 +1,16 @@
+import 'dart:async';
+
+import 'package:club_for_me/Features/Dashboard/map/controller/google_maps_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GoogleMapsController controller = Get.put(GoogleMapsController());
     return SafeArea(
       child: Scaffold(
           body: Stack(
@@ -12,10 +18,25 @@ class MapScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: double.infinity,
-            child: Image.asset(
-              fit: BoxFit.cover,
-              'assets/images/map-full.png',
-            ),
+            child: controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : GoogleMap(
+                    onMapCreated: controller.onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: controller.currentLocation.value.latitude != 0 &&
+                              controller.currentLocation.value.longitude != 0
+                          ? controller.currentLocation.value
+                          : controller.defaultLocation,
+                      zoom: 15,
+                    ),
+                    zoomGesturesEnabled:
+                        true, // Allow zooming with pinch gestures
+                    scrollGesturesEnabled: true, // Allow map scrolling
+                    tiltGesturesEnabled: true, // Allow tilting the map
+                    rotateGesturesEnabled: true, // Allow rotating the map
+                    myLocationEnabled: true, // Show user's current location
+                    myLocationButtonEnabled: true, // Show location button\
+                  ),
           ),
           Column(
             children: [
@@ -24,14 +45,26 @@ class MapScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
+                      child: TextFormField(
+                        controller: controller.searchController,
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)),
-                            hintText: 'Find for food or restaurant...'),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10)),
+                          hintText: 'Find for food or restaurant...',
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            controller.onSearchChanged(value);
+                          } else {
+                            controller.suggestions.value = [];
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(
@@ -47,6 +80,17 @@ class MapScreen extends StatelessWidget {
                     )
                   ],
                 ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 250,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(20)),
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: controller.suggestions.map((e) => Text(e)).toList(),
+                )),
               ),
               SizedBox(
                 height: 50,

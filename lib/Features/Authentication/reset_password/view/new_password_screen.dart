@@ -76,7 +76,7 @@ class NewPasswordScreen extends StatelessWidget {
               buttonLabel: 'Save',
               icon: Icons.arrow_forward,
               onTap: () {
-                Get.to(SigininScreen()); 
+                Get.to(const SigininScreen()); 
               },
             ),
           ],

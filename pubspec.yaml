@@ -45,6 +45,9 @@ dependencies:
   flutter_easyloading: ^3.0.5
   fluttertoast: ^8.2.8
   google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  firebase_storage: ^12.3.7
 
 dev_dependencies:
   flutter_test:
