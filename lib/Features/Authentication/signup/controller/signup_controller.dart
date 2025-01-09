@@ -41,7 +41,7 @@ class SignupController extends GetxController {
 
         // Show success message
         ErrorHandler.showSuccessSnackkbar(
-            "Success", "Account is created successfully");
+            "Success", "Account is created successfully",);
 
         Get.to(() => const CreateUsernameScreen());
       } else {

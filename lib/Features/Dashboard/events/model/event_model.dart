@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class EventNodel {
+class EventModel {
   String? id; // Unique identifier for the event
   String? eventName;
   String? venue;
   String? eventRepeat;
   DateTime? startDate;
-  TimeOfDay? startTime;
+  DateTime? startTime; // Stored as DateTime
   String? duration;
-  TimeOfDay? endTime;
+  DateTime? endTime; // Stored as DateTime
   String? description;
-  List<String>? images; // Stores image URLs or paths
-  String? organizer; // Organizer of the event
+  List<String>? images;
+  String? organizerId;
 
-  EventNodel({
+  EventModel({
     this.id,
     this.eventName,
     this.venue,
@@ -24,7 +24,7 @@ class EventNodel {
     this.endTime,
     this.description,
     this.images,
-    this.organizer,
+    this.organizerId,
   });
 
   // Method to convert to a map for storing in databases (e.g., Firebase or SQLite)
@@ -35,45 +35,31 @@ class EventNodel {
       'venue': venue,
       'eventRepeat': eventRepeat,
       'startDate': startDate?.toIso8601String(),
-      'startTime': startTime != null
-          ? '${startTime!.hour}:${startTime!.minute}'
-          : null,
+      'startTime': startTime?.toIso8601String(), // Store as ISO8601 string
       'duration': duration,
-      'endTime': endTime != null
-          ? '${endTime!.hour}:${endTime!.minute}'
-          : null,
+      'endTime': endTime?.toIso8601String(), // Store as ISO8601 string
       'description': description,
       'images': images,
-      'organizer': organizer,
+      'organizerId': organizerId,
     };
   }
 
   // Factory method to create an Event from a map
-  factory EventNodel.fromMap(Map<String, dynamic> map) {
-    return EventNodel(
+  factory EventModel.fromMap(Map<String, dynamic> map) {
+    return EventModel(
       id: map['id'],
       eventName: map['eventName'],
       venue: map['venue'],
       eventRepeat: map['eventRepeat'],
-      startDate: map['startDate'] != null
-          ? DateTime.parse(map['startDate'])
-          : null,
-      startTime: map['startTime'] != null
-          ? TimeOfDay(
-              hour: int.parse(map['startTime'].split(':')[0]),
-              minute: int.parse(map['startTime'].split(':')[1]),
-            )
-          : null,
+      startDate:
+          map['startDate'] != null ? DateTime.parse(map['startDate']) : null,
+      startTime:
+          map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
       duration: map['duration'],
-      endTime: map['endTime'] != null
-          ? TimeOfDay(
-              hour: int.parse(map['endTime'].split(':')[0]),
-              minute: int.parse(map['endTime'].split(':')[1]),
-            )
-          : null,
+      endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
       description: map['description'],
       images: List<String>.from(map['images'] ?? []),
-      organizer: map['organizer'],
+      organizerId: map['organizerId'],
     );
   }
 }

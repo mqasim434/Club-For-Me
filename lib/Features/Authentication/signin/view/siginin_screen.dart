@@ -1,6 +1,7 @@
 import 'package:club_for_me/Features/Authentication/reset_password/view/reset_password_screen.dart';
 import 'package:club_for_me/Features/Authentication/signin/controller/siginin_controller.dart';
 import 'package:club_for_me/Features/Authentication/signup/view/signup_screen.dart';
+import 'package:club_for_me/Features/Dashboard/dashboard.dart';
 import 'package:club_for_me/Utils/constants/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -88,6 +89,7 @@ class SigininScreen extends StatelessWidget {
                   hintText: 'Your Password',
                   prefixIconImage: AppIcons.passwordIcon,
                   controller: signinController.password,
+                  isPassword: true,
                 ),
                 SizedBox(
                   height: screenHeight * 0.010,
@@ -138,19 +140,25 @@ class SigininScreen extends StatelessWidget {
                 SizedBox(
                   height: screenHeight * 0.016,
                 ),
-                Card(
-                  child: Container(
-                    height: 56,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/icons/google.png'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const Text('Login with Google')
-                      ],
+                InkWell(
+                  onTap: () async {
+                    await signinController.signinWithGoogle();
+                    Get.to(() => DashboardScreen());
+                  },
+                  child: Card(
+                    child: Container(
+                      height: 56,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/icons/google.png'),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          const Text('Login with Google')
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -182,7 +190,7 @@ class SigininScreen extends StatelessWidget {
                     const Text("Don't have an account? "),
                     InkWell(
                         onTap: () {
-                          Get.to(const SignupScreen());
+                          Get.to(()=>const SignupScreen());
                         },
                         child: const Text("Sign up")),
                   ],
@@ -270,6 +278,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      obscureText: isPassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

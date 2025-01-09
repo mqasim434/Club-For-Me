@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:club_for_me/Common/widgets/NextButton.dart';
 import 'package:club_for_me/Features/Authentication/complete_profile/view/choose_profile_photo_screen.dart';
 import 'package:club_for_me/Features/Authentication/complete_profile/view/choose_your_city_screen.dart';
 import 'package:club_for_me/Features/Authentication/complete_profile/view/widgets/profile_step_indicator_widget.dart';
+import 'package:club_for_me/Utils/errors/error_handler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +13,7 @@ class ChooseFavoriteEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favouriteEventController = Get.put(FavouriteEventController());
     return SafeArea(
         child: Scaffold(
       body: Padding(
@@ -68,42 +72,33 @@ class ChooseFavoriteEventScreen extends StatelessWidget {
                 const Wrap(
                   spacing: 4,
                   children: [
-                    ChoiceChip(
-                      label: Text('Night Party'),
-                      selected: true,
-                      showCheckmark: false,
-                      selectedColor: Colors.black,
-                      labelStyle: TextStyle(color: Colors.white),
+                    MyChoiceChip(
+                      label: 'Night Party',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('Silent Party'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Silent Party',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('After Party'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'After Party',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('Dinner Show'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Dinner Show',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('Live/Concert'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Live/Concert',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('Karaoke'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Karaoke',
+                      type: 'event',
                     ),
-                    ChoiceChip(
-                      label: Text('Festival'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Festival',
+                      type: 'event',
                     ),
                   ],
                 ),
@@ -120,52 +115,41 @@ class ChooseFavoriteEventScreen extends StatelessWidget {
                 const Wrap(
                   spacing: 4,
                   children: [
-                    ChoiceChip(
-                      label: Text('Techno/Tech House'),
-                      selected: true,
-                      showCheckmark: false,
-                      selectedColor: Colors.black,
-                      labelStyle: TextStyle(color: Colors.white),
+                    MyChoiceChip(
+                      label: 'Techno/Tech House',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('EDM'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'EDM',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('Revival'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Revival',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('Trap/Hip-Hop'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Trap/Hip-Hop',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('POP'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'POP',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('Reggae'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Reggae',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('Latin'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Latin',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('JAzz'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Jazz',
+                      type: 'genre',
                     ),
-                    ChoiceChip(
-                      label: Text('Rock'),
-                      selected: true,
-                      showCheckmark: false,
+                    MyChoiceChip(
+                      label: 'Rock',
+                      type: 'genre',
                     ),
                   ],
                 ),
@@ -174,12 +158,85 @@ class ChooseFavoriteEventScreen extends StatelessWidget {
             NextButton(
               buttonLabel: 'Next',
               onPressed: () {
-                Get.to(()=>const ChooseYourCityScreen());
+                favouriteEventController.addChoicesToFirebase().then((val) {
+                  Get.to(() => const ChooseYourCityScreen());
+                });
               },
             ),
           ],
         ),
       ),
     ));
+  }
+}
+
+class MyChoiceChip extends StatelessWidget {
+  final String label;
+  final String type;
+
+  const MyChoiceChip({
+    super.key,
+    required this.label,
+    required this.type,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final FavouriteEventController controller = Get.find();
+
+    return Obx(() {
+      final bool isSelected = type == 'event'
+          ? controller.selectedEventType == label
+          : controller.selectedMusicGenre == label;
+
+      return ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        showCheckmark: false,
+        selectedColor: Colors.black,
+        labelStyle: isSelected
+            ? const TextStyle(color: Colors.white)
+            : const TextStyle(color: Colors.black),
+        onSelected: (bool selected) {
+          if (type == 'event') {
+            controller.setSelectedEventType(label);
+          } else if (type == 'genre') {
+            controller.setSelectedMusicGenre(label);
+          }
+        },
+      );
+    });
+  }
+}
+
+class FavouriteEventController extends GetxController {
+  final RxString _selectedEventType = 'Night Party'.obs;
+  final RxString _selectedMusicGenre = 'Techno/Tech House'.obs;
+
+  String get selectedEventType => _selectedEventType.value;
+  String get selectedMusicGenre => _selectedMusicGenre.value;
+
+  void setSelectedEventType(String event) {
+    _selectedEventType.value = event;
+  }
+
+  void setSelectedMusicGenre(String genre) {
+    _selectedMusicGenre.value = genre;
+  }
+
+  Future<void> addChoicesToFirebase() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+    try {
+      firebaseFirestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        'favouriteEvent': _selectedEventType.value,
+        'musicGenre': _selectedMusicGenre.value,
+      });
+    } catch (e) {
+      ErrorHandler.showErrorSnackbar(e.toString());
+    }
   }
 }

@@ -5,7 +5,7 @@ class UserModel {
   String? password;
   String? profilePic;
   String? gender;
-  String? languge;
+  String? language;
   String? city;
   String? favouriteEvent;
   String? musicGenre;
@@ -20,7 +20,7 @@ class UserModel {
     this.id = '',
     this.username = '',
     this.email = '',
-    this.languge = '',
+    this.language = '',
     this.city = '',
     this.favouriteEvent = '',
     this.musicGenre = '',
@@ -42,7 +42,7 @@ class UserModel {
       'email': email,
       'password': password,
       'city': city,
-      'languge': languge,
+      'language': language,
       'favouriteEvent': favouriteEvent,
       'musicGenre': musicGenre,
       'profilePic': profilePic,
@@ -64,7 +64,7 @@ class UserModel {
       email: map['email'] ?? '',
       password: map['password'] ?? '',
       city: map['city'] ?? '',
-      languge: map['languge'] ?? '',
+      language: map['language'] ?? '',
       favouriteEvent: map['favouriteEvent'] ?? '',
       musicGenre: map['musicGenre'] ?? '',
       profilePic: map['profilePic'] ?? '',

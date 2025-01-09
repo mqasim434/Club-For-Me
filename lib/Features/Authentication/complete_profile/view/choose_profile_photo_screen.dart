@@ -115,7 +115,7 @@ class ProfilePhotoController extends GetxController {
       final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
 
       if (photo != null) {
-        // Show local image first
+        // Show local image while uploading
         selectedPhoto.value = photo.path;
 
         // Show a loading indicator or feedback
@@ -123,7 +123,9 @@ class ProfilePhotoController extends GetxController {
 
         // Upload image to Firebase Storage
         String downloadUrl = await uploadPhotoToFirebase(File(photo.path));
-        selectedPhoto.value = downloadUrl; // Update with Firebase URL
+
+        // Update with Firebase URL after successful upload
+        selectedPhoto.value = downloadUrl;
 
         // Notify user
         Get.snackbar("Success", "Photo uploaded successfully.");

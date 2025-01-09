@@ -8,7 +8,7 @@ class ErrorHandler {
     Get.snackbar(
       "Error404",
       message,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
       margin: const EdgeInsets.all(10),
       backgroundColor: Colors.red,
       colorText: Colors.white,
@@ -20,7 +20,7 @@ class ErrorHandler {
     Get.snackbar(
       title ?? "Congratulation",
       message,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
       margin: const EdgeInsets.all(10),
       // backgroundColor: const Color.fromARGB(255, 172, 0, 0),
       colorText: Colors.black,

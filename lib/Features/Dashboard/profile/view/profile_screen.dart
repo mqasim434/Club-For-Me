@@ -1,6 +1,8 @@
 import 'package:club_for_me/Features/Authentication/signin/view/siginin_screen.dart';
 import 'package:club_for_me/Features/Chat/messages_screen.dart';
 import 'package:club_for_me/Features/Dashboard/events/view/create_event_screen.dart';
+import 'package:club_for_me/Features/Dashboard/events/view/manage_events_screen.dart';
+import 'package:club_for_me/Features/Dashboard/profile/controller/profile_controller.dart';
 import 'package:club_for_me/Features/Dashboard/profile/view/my_profile_screen.dart';
 import 'package:club_for_me/Features/Notifications/view/notifications_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final profileController = Get.find<ProfileController>();
     return SafeArea(
         child: Stack(
       children: [
@@ -22,9 +25,8 @@ class ProfileScreen extends StatelessWidget {
           height: screenHeight * 0.12,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/profile-bg.png'),
-            ),
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/profile-bg.png')),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10),
@@ -40,13 +42,20 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: (screenHeight * 0.12) - 16 - 30,
                 ),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 30,
-                  backgroundImage: AssetImage('assets/images/profile.jpeg'),
+                  backgroundImage:
+                      (profileController.currentUser.value == null ||
+                              profileController.currentUser.value!.profilePic ==
+                                  null)
+                          ? const AssetImage('assets/images/profile-bg.png')
+                          : NetworkImage(profileController
+                              .currentUser.value!.profilePic
+                              .toString()),
                 ),
-                const Text(
-                  'Surendhar P',
-                  style: TextStyle(fontSize: 19),
+                Text(
+                  profileController.currentUser.value!.username.toString(),
+                  style: const TextStyle(fontSize: 19),
                 ),
                 const Text(
                   'Bangalore, India',
@@ -132,13 +141,15 @@ class ProfileScreen extends StatelessWidget {
                         label: 'Create an Event',
                         icon: Icons.add,
                         onTap: () {
-                          Get.to(()=>CreateEventScreen());
+                          Get.to(() => const CreateEventScreen());
                         },
                       ),
                       ProfileButtonWidget(
                         label: 'Manage Events',
                         icon: Icons.calendar_month,
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(() => const ManageEventsScreen());
+                        },
                       ),
                     ],
                   ),
@@ -225,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
                         icon: Icons.logout,
                         onTap: () {
                           FirebaseAuth.instance.signOut().then((val) {
-                            Get.offAll(const SigininScreen());
+                            Get.offAll(() => const SigininScreen());
                           });
                         },
                       ),

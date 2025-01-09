@@ -1,7 +1,9 @@
 import 'package:club_for_me/Data/remote/events_repo.dart';
 import 'package:club_for_me/Features/Dashboard/events/model/event_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class EventsController extends GetxController {
   final eventNameController = TextEditingController().obs;
@@ -16,15 +18,11 @@ class EventsController extends GetxController {
 
   final formKey = GlobalKey<FormState>();
 
-  final EventsRepository _repository;
+  final EventsRepository _repository = EventsRepository();
 
-  var events = <EventNodel>[].obs;
-  
+  var events = <EventModel>[].obs;
 
   var isLoading = false.obs;
-
-  EventsController({required EventsRepository repository})
-      : _repository = repository;
 
   @override
   void onInit() {
@@ -50,21 +48,34 @@ class EventsController extends GetxController {
     isLoading.value = true;
 
     if (formKey.currentState!.validate()) {
-      EventNodel event = EventNodel(
-        eventName: eventNameController.value.text,
-        venue: venueController.value.text,
-        eventRepeat: eventRepeatController.value.text,
-        startDate: DateTime.parse(startDateController.value.text),
-        startTime: TimeOfDay.fromDateTime(DateTime.parse(startTimeController.value.text)),
-        duration: durationController.value.text,
-        endTime: TimeOfDay.fromDateTime(DateTime.parse(endTimeController.value.text)),
-        description: eventDescriptionController.value.text,
-        images: imagesList,
-      );
+      EventModel event = EventModel(
+          eventName: eventNameController.value.text,
+          venue: venueController.value.text,
+          eventRepeat: eventRepeatController.value.text,
+          startDate:
+              DateFormat('yyyy-MM-dd').parse(startDateController.value.text),
+          startTime:
+              DateFormat('hh:mm a').parse(startTimeController.value.text),
+          duration: durationController.value.text,
+          endTime: DateFormat('hh:mm a').parse(endTimeController.value.text),
+          description: eventDescriptionController.value.text,
+          images: imagesList,
+          organizerId: FirebaseAuth.instance.currentUser!.uid);
+
       try {
         await _repository.addEvent(event);
-        events.add(event); // Optimistically add to the list
+        events.add(event); 
+        eventNameController.value.clear();
+        venueController.value.clear();
+        eventRepeatController.value.clear();
+        startDateController.value.clear();
+        durationController.value.clear();
+        startTimeController.value.clear();
+        endTimeController.value.clear();
+        eventDescriptionController.value.clear();
+        imagesList.clear();
         Get.snackbar('Success', 'Event added successfully');
+        await fetchEvents();
       } catch (e) {
         Get.snackbar('Error', 'Failed to add event: $e');
       } finally {
@@ -74,7 +85,7 @@ class EventsController extends GetxController {
   }
 
   /// Update an existing event
-  Future<void> updateEvent(EventNodel updatedEvent) async {
+  Future<void> updateEvent(EventModel updatedEvent) async {
     isLoading.value = true;
     try {
       await _repository.updateEvent(updatedEvent);

@@ -1,8 +1,15 @@
 import 'package:club_for_me/Common/widgets/NextButton.dart';
+import 'package:club_for_me/Features/Dashboard/events/model/event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({super.key});
+  const EventDetailsScreen({
+    super.key,
+    required this.event,
+  });
+  final EventModel event;
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +20,9 @@ class EventDetailsScreen extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: screenHeight * 0.3,
-          child: Image.asset(
+          child: Image.network(
+            '${event.images![0]}',
             fit: BoxFit.cover,
-            'assets/images/event_detail.png',
           ),
         ),
         Scaffold(
@@ -88,10 +95,10 @@ class EventDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    'Going to a Rock Concert',
+                    event.eventName.toString(),
                     style: TextStyle(fontSize: 28),
                   ),
                 ),
@@ -106,8 +113,12 @@ class EventDetailsScreen extends StatelessWidget {
                       Icons.calendar_month,
                     ),
                   ),
-                  title: const Text('14 December, 2024',style: TextStyle(fontSize: 62),),
-                  subtitle: const Text('Tuesday, 4:00PM - 9:00PM',style: TextStyle(fontSize: 12),),
+                  title: Text(
+                    DateFormat('dd MMMM, yyyy').format(event.startDate!),
+                  ),
+                  subtitle: Text(
+                    '${DateFormat('EEE').format(event.startDate!)}, ${DateFormat('hh:mmaa').format(event.startTime!)} - ${DateFormat('hh:mmaa').format(event.endTime!)}',
+                  ),
                 ),
                 ListTile(
                   leading: Container(
@@ -120,10 +131,10 @@ class EventDetailsScreen extends StatelessWidget {
                       Icons.location_pin,
                     ),
                   ),
-                  title: const Text('Gala Convention Center'),
-                  subtitle: const Text('36 Guild Street London, UK '),
+                  title: Text(event.venue.toString()),
+                  subtitle: const Text(''),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +146,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Enjoy your favorite dishe and a lovely your friends and family and have a Read More...',
+                        event.description.toString(),
                         style: TextStyle(
                           fontSize: 16,
                         ),
@@ -152,11 +163,76 @@ class EventDetailsScreen extends StatelessWidget {
                               fontSize: 18,
                             ),
                           ),
-                          Text(
-                            'View All',
-                            style: TextStyle(
-                              fontSize: 16,
-                              decoration: TextDecoration.underline,
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Event Gallery'),
+                                          IconButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              icon: Icon(Icons.close))
+                                        ],
+                                      ),
+                                      content: GridView.builder(
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  mainAxisSpacing: 5,
+                                                  crossAxisSpacing: 5),
+                                          itemCount: event.images!.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text('Preview'),
+                                                            IconButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                },
+                                                                icon: Icon(Icons
+                                                                    .close))
+                                                          ],
+                                                        ),
+                                                        content: Image.network(
+                                                            event.images![
+                                                                index]),
+                                                      );
+                                                    });
+                                              },
+                                              child: SizedBox(
+                                                width: 200,
+                                                height: 200,
+                                                child: Image.network(
+                                                    fit: BoxFit.cover,
+                                                    event.images![index]),
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                  });
+                            },
+                            child: const Text(
+                              'View All',
+                              style: TextStyle(
+                                fontSize: 16,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ],
@@ -170,26 +246,13 @@ class EventDetailsScreen extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c1-i1.jpeg',
-                      ),
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c1-i2.jpeg',
-                      ),
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c2-i1.jpeg',
-                      ),
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c2-i2.jpeg',
-                      ),
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c3-i1.jpeg',
-                      ),
-                      GalleryImageWidget(
-                        image: 'assets/images/Onboarding1/ob1-c3-i2.jpeg',
-                      ),
-                    ],
+                    children: event.images!
+                        .map(
+                          (e) => GalleryImageWidget(
+                            image: e,
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
                 Padding(
@@ -245,16 +308,38 @@ class GalleryImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 16),
-      width: 68,
-      height: 68,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(
-            image,
+    return InkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Preview'),
+                    IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(Icons.close))
+                  ],
+                ),
+                content: Image.network(image),
+              );
+            });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 16),
+        width: 68,
+        height: 68,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              image,
+            ),
           ),
         ),
       ),

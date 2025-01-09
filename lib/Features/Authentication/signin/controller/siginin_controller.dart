@@ -1,7 +1,8 @@
 import 'package:club_for_me/Data/remote/auth_repo.dart';
-import 'package:club_for_me/Features/Dashboard/controller/dashboard_controller.dart';
 import 'package:club_for_me/Features/Dashboard/dashboard.dart';
+import 'package:club_for_me/Features/Dashboard/profile/controller/profile_controller.dart';
 import 'package:club_for_me/Utils/errors/error_handler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -16,14 +17,11 @@ class SigninController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
 
+  final profileController = Get.find<ProfileController>();
+
   Future<void> userSignin() async {
     try {
       EasyLoading.show(status: 'Sigining In...');
-
-      // if (!signinFormKey.currentState!.validate()) {
-      //   EasyLoading.dismiss();
-      //   return;
-      // }
 
       String? errorMessage = await authRepo.login(
         email: email.text.trim(),
@@ -36,6 +34,8 @@ class SigninController extends GetxController {
         return;
       }
 
+       await profileController.fetchCurrentUser(FirebaseAuth.instance.currentUser!.uid);
+
       email.clear();
       password.clear();
 
@@ -43,9 +43,20 @@ class SigninController extends GetxController {
 
       ErrorHandler.showSuccessSnackkbar('Success', 'Login Successful!');
 
-      Get.to(() => DashboardScreen());
+      Get.to(() => const DashboardScreen());
     } catch (e) {
       EasyLoading.dismiss();
+      ErrorHandler.showErrorSnackbar(
+        'An unexpected error occurred: ${e.toString()}',
+      );
+    }
+  }
+
+  Future<void> signinWithGoogle() async {
+    try {
+      await authRepo.handleGoogleSignIn();
+      await profileController.fetchCurrentUser(FirebaseAuth.instance.currentUser!.uid);
+    } catch (e) {
       ErrorHandler.showErrorSnackbar(
         'An unexpected error occurred: ${e.toString()}',
       );

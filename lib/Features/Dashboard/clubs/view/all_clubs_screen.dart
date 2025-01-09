@@ -13,22 +13,24 @@ class AllClubsScreen extends StatelessWidget {
         title: const Text('All Clubs'),
         actions: const [
           Icon(Icons.search),
-          SizedBox(
-            width: 12,
-          ),
+          SizedBox(width: 12),
           Icon(Icons.more_vert),
         ],
       ),
-      body: Expanded(child: ListView.builder(itemBuilder: (context, index) {
-        return EventCardItemWidget(
+      body: ListView.builder(
+        itemCount: 10, // Add an appropriate item count
+        itemBuilder: (context, index) {
+          return EventCardItemWidget(
             image: 'assets/images/event.png',
             title: 'Jo Malone London’s Mother’s Day Presents',
             dateTime: '',
             location: "Radius Gallery • Santa Cruz, CA",
             onTap: () {
-              Get.to(() => ClubDetailsScreen());
-            });
-      })),
+              Get.to(() => const ClubDetailsScreen());
+            },
+          );
+        },
+      ),
     );
   }
 }

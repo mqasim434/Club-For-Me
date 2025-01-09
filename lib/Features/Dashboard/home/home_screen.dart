@@ -1,4 +1,5 @@
 import 'package:club_for_me/Features/Authentication/signin/view/siginin_screen.dart';
+import 'package:club_for_me/Features/Dashboard/clubs/view/all_clubs_screen.dart';
 import 'package:club_for_me/Features/Dashboard/events/view/all_events_screen.dart';
 import 'package:club_for_me/Features/Notifications/view/notifications_screen.dart';
 import 'package:club_for_me/Utils/constants/app_icons.dart';
@@ -37,8 +38,8 @@ class HomeScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child:
-                    MyTextField(hintText: 'Search', prefixIconImage: AppIcons.searchIcon),
+                child: MyTextField(
+                    hintText: 'Search', prefixIconImage: AppIcons.searchIcon),
               ),
               const SizedBox(
                 height: 8,
@@ -124,7 +125,7 @@ class HomeScreen extends StatelessWidget {
                     InkWell(
                       child: const Text('See All'),
                       onTap: () {
-                        Get.to(const AllEventsScreen());
+                        Get.to(()=>const AllEventsScreen());
                       },
                     ),
                   ],
@@ -177,13 +178,17 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Popular Now'),
-                    Text('See All'),
+                    const Text('Popular Now'),
+                    InkWell(
+                        onTap: () {
+                          Get.to(() => const AllClubsScreen());
+                        },
+                        child: const Text('See All')),
                   ],
                 ),
               ),
@@ -218,13 +223,17 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Recommendations for you'),
-                    Text('See All'),
+                    const Text('Recommendations for you'),
+                    InkWell(
+                        onTap: () {
+                          Get.to(() => const AllEventsScreen());
+                        },
+                        child: const Text('See All')),
                   ],
                 ),
               ),
@@ -296,7 +305,7 @@ class HomeCardWidget extends StatelessWidget {
     return Container(
         width: screenWidth * 0.85,
         height: screenHeight * 0.35,
-        margin: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           boxShadow: [

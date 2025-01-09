@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -35,7 +36,7 @@ class AuthenticationRepository extends GetxController {
         createdAt: time,
         lastActive: time,
         city: '',
-        languge: '',
+        language: '',
         favouriteEvent: '',
         musicGenre: '',
         status: 'active',
@@ -133,6 +134,67 @@ class AuthenticationRepository extends GetxController {
       return EPlatformException(e.code).message;
     } else {
       return 'Something went wrong. Please try again later.';
+    }
+  }
+
+  Future<void> handleGoogleSignIn() async {
+    try {
+      // Initialize Google Sign-In
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        print("Google Sign-In aborted by user");
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Authenticate with Firebase
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Get the authenticated user
+      final User? user = userCredential.user;
+
+      print('User ${user}');
+
+      if (user != null) {
+        // Get Firestore reference
+        final CollectionReference usersRef =
+            FirebaseFirestore.instance.collection('users');
+
+        // Check if the user exists in Firestore
+        DocumentSnapshot userDoc = await usersRef.doc(user.uid).get();
+
+        // Prepare user data
+        final userData = {
+          "name": user.displayName,
+          "email": user.email,
+          "photoURL": user.photoURL,
+          "lastSignIn": FieldValue.serverTimestamp(),
+        };
+
+        if (userDoc.exists) {
+          // Update the existing user's data
+          await usersRef.doc(user.uid).update(userData);
+          print("User data updated: ${user.email}");
+        } else {
+          // Add a new user to the database
+          await usersRef.doc(user.uid).set(userData);
+          print("New user added: ${user.email}");
+        }
+      } else {
+        print("Error: No user found after Google Sign-In");
+      }
+    } catch (error) {
+      print("Error during Google Sign-In: $error");
     }
   }
 }

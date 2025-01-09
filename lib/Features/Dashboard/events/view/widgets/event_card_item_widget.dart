@@ -18,7 +18,6 @@ class EventCardItemWidget extends StatelessWidget {
   bool isFullWidth;
   Function()? onTap;
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -38,7 +37,7 @@ class EventCardItemWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
+                    image: NetworkImage(
                       image,
                     ),
                   ),

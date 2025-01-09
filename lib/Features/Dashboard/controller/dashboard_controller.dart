@@ -1,5 +1,5 @@
 import 'package:club_for_me/Features/Dashboard/clubs/view/clubs_screen.dart';
-import 'package:club_for_me/Features/Dashboard/events/view/events_screen.dart';
+import 'package:club_for_me/Features/Dashboard/events/view/manage_events_screen.dart';
 import 'package:club_for_me/Features/Dashboard/home/home_screen.dart';
 import 'package:club_for_me/Features/Dashboard/map/view/map_screen.dart';
 import 'package:club_for_me/Features/Dashboard/profile/view/profile_screen.dart';
@@ -56,7 +56,7 @@ class DashboardController extends GetxController {
 
   List<Widget> screensList = [
     const HomeScreen(),
-    const EventsScreen(),
+    const ManageEventsScreen(),
     const ClubsScreen(),
     const MapScreen(),
     const ProfileScreen(),

@@ -26,7 +26,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -47,7 +47,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -78,7 +78,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Colors.white,
                               image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
@@ -95,7 +95,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Colors.white,
                               image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
@@ -120,7 +120,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -141,7 +141,7 @@ class Onboarding3Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -196,29 +196,29 @@ class Onboarding3Screen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: const Color(0x8B868833),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: const Color(0x8B868833),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
                         width: 35,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: const Color(0x8B868833),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 5,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: const Color(0x8B868833),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 5,
                         height: 5,
                         decoration: BoxDecoration(
                           color: Colors.black,
@@ -234,7 +234,7 @@ class Onboarding3Screen extends StatelessWidget {
                       NextButton(
                         buttonLabel: 'Next ',
                         onPressed: () {
-                          Get.to(()=>SigininScreen());
+                          Get.to(() => SigininScreen());
                         },
                       ),
                     ],

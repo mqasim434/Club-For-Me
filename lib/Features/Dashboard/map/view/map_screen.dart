@@ -81,17 +81,27 @@ class MapScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: 250,
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(20)),
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: controller.suggestions.map((e) => Text(e)).toList(),
-                )),
-              ),
+              Obx(() {
+                return controller.suggestions.isNotEmpty
+                    ? Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 250,
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.7),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: SingleChildScrollView(
+                            child: Column(
+                          children: controller.suggestions
+                              .map((e) => ListTile(
+                                    leading: const Icon(Icons.location_pin),
+                                    title: Text(e),
+                                    trailing: const Icon(Icons.arrow_forward),
+                                  ))
+                              .toList(),
+                        )),
+                      )
+                    : const SizedBox();
+              }),
               SizedBox(
                 height: 50,
                 child: ListView(

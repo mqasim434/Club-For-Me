@@ -1,4 +1,6 @@
+import 'package:club_for_me/Features/Dashboard/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({super.key});
@@ -7,6 +9,7 @@ class MyProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final profileController = Get.find<ProfileController>();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -23,12 +26,17 @@ class MyProfileScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/images/profile.jpeg'),
+                backgroundImage: (profileController.currentUser.value == null ||
+                        profileController.currentUser.value!.profilePic == null)
+                    ? const AssetImage('assets/images/profile-bg.png')
+                    : NetworkImage(profileController
+                        .currentUser.value!.profilePic
+                        .toString()),
               ),
-              const Text(
-                'Surendhar P',
+              Text(
+                profileController.currentUser.value!.username.toString(),
                 style: TextStyle(fontSize: 19),
               ),
               const Text(
@@ -41,7 +49,7 @@ class MyProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Column(
+                const Column(
                     children: [
                       Text(
                         '350',

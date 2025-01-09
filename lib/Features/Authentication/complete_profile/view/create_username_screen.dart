@@ -38,7 +38,8 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
           FirebaseAuth.instance.currentUser; // Get the current logged-in user
 
       if (user == null) {
-        Get.snackbar('Error', 'No user is logged in. Please log in again.');
+        Get.snackbar('Error', 'No user is logged in. Please log in again.',
+            snackPosition: SnackPosition.TOP);
         setState(() {
           _isLoading = false;
         });
@@ -56,7 +57,8 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
         bool isCurrentUser = snapshot.docs.any((doc) => doc.id == user.uid);
 
         if (!isCurrentUser) {
-          Get.snackbar('Error', 'Username already exists. Please try another.');
+          Get.snackbar('Error', 'Username already exists. Please try another.',
+              snackPosition: SnackPosition.TOP);
           setState(() {
             _isLoading = false;
           });
@@ -69,10 +71,12 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
         'username': username,
       }, SetOptions(merge: true)); // Merge to prevent overwriting other fields
 
-      Get.snackbar('Success', 'Username saved successfully!');
+      Get.snackbar('Success', 'Username saved successfully!',
+          snackPosition: SnackPosition.TOP);
       Get.to(() => const ChooseLanguageScreen());
     } catch (e) {
-      Get.snackbar('Error', 'Something went wrong. Please try again.');
+      Get.snackbar('Error', 'Something went wrong. Please try again.',
+          snackPosition: SnackPosition.TOP);
     } finally {
       setState(() {
         _isLoading = false;
@@ -131,6 +135,8 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: 'Username',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
                       prefixIcon: Icon(Icons.person),
                       suffixIcon:
                           _isLoading ? const CircularProgressIndicator() : null,

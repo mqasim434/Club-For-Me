@@ -26,7 +26,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -47,7 +47,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -78,7 +78,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Colors.white,
                               image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
@@ -95,7 +95,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Colors.white,
                               image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
@@ -120,7 +120,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 5,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
@@ -141,7 +141,7 @@ class Onboarding2Screen extends StatelessWidget {
                         flex: 4,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage(
